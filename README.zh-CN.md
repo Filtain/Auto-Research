@@ -45,6 +45,70 @@ python3 -m orchestrator.src.orchestrator \
 
 运行后会在 `output/` 下生成一个项目目录，里面包含检索结果、阅读记录、证据库、综述报告、验证报告和最终 QA 决策。
 
+## 论文来源方式
+
+Auto Research 支持两种论文输入方式：
+
+### 1. 系统自动搜索论文
+
+默认情况下，你输入一个研究问题后，系统会先从外部来源检索论文元数据。当前 Retriever 支持：
+
+```text
+arXiv
+Semantic Scholar
+OpenAlex
+Crossref
+OpenReview
+PubMed
+GitHub
+```
+
+检索阶段会生成标准化文件，例如：
+
+```text
+papers.csv
+papers_raw.jsonl
+search_results.jsonl
+retrieval_errors.jsonl
+```
+
+这些记录可能包含论文标题、作者、摘要、年份、会议/期刊、DOI、arXiv ID、引用信息、网页链接，以及 provider 暴露出来的 `pdf_url`。
+
+### 2. 你自己提供本地 PDF
+
+你也可以把已经下载好的论文 PDF 放到本地 PDF 输入路径，并使用 `local_pdf` 来源。对于高质量综述，这是更稳定的方式，因为 Paper Reader 可以直接解析 PDF 全文，而不是只依赖标题、摘要和元数据。
+
+本地 PDF 在解析可用时可以生成更丰富的产物：
+
+```text
+paper_readings.jsonl
+paper_fulltext_chunks.jsonl
+paper_layout_blocks.jsonl
+paper_sections.jsonl
+paper_tables.jsonl
+paper_formulas.jsonl
+```
+
+### 关于自动下载 PDF
+
+当检索记录里存在可用的 `pdf_url`，并且阅读任务允许下载 PDF 时，Auto Research 可以尝试自动下载并读取 PDF。但这是 best-effort 能力，不保证每篇论文都能自动拿到全文。
+
+自动下载全文不保证成功，原因包括：
+
+- 很多 provider 只返回元数据，不返回 PDF 链接；
+- 一些论文在出版社页面后面，需要权限访问；
+- 有些链接是网页 landing page，不是直接 PDF；
+- 网络或 API 失败会被记录为不确定状态；
+- 下载失败时系统会退回到摘要和元数据阅读。
+
+推荐的高质量使用方式：
+
+```text
+1. 先让 Auto Research 自动搜索和排序候选论文。
+2. 再把最重要的核心论文 PDF 放到本地。
+3. 重新运行论文阅读、证据抽取、验证和 Final QA。
+```
+
 ## 核心流程
 
 ### 流程总览

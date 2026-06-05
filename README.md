@@ -49,6 +49,70 @@ python3 -m orchestrator.src.orchestrator \
 
 The run creates a project folder under `output/` with structured research artifacts, logs, verification reports, and a final QA decision.
 
+## Paper Sources
+
+Auto Research can work in two modes:
+
+### 1. Let the system search for papers
+
+By default, the workflow starts from a research question and retrieves paper metadata from external sources. The retriever currently supports:
+
+```text
+arXiv
+Semantic Scholar
+OpenAlex
+Crossref
+OpenReview
+PubMed
+GitHub
+```
+
+The retrieval stage writes normalized records such as:
+
+```text
+papers.csv
+papers_raw.jsonl
+search_results.jsonl
+retrieval_errors.jsonl
+```
+
+These records may include titles, authors, abstracts, years, venues, DOI/arXiv IDs, citation metadata, URLs, and `pdf_url` when a provider exposes one.
+
+### 2. Provide your own local PDFs
+
+You can also put papers into the local PDF input path and use the `local_pdf` source. This is the most reliable option when you already have the core papers, because the reader can parse the actual PDF instead of relying only on metadata and abstracts.
+
+Local PDFs can produce richer artifacts when PDF parsing is available:
+
+```text
+paper_readings.jsonl
+paper_fulltext_chunks.jsonl
+paper_layout_blocks.jsonl
+paper_sections.jsonl
+paper_tables.jsonl
+paper_formulas.jsonl
+```
+
+### About automatic PDF downloads
+
+Auto Research can read downloaded PDFs when a retrieved record contains a usable `pdf_url` and the reading task is configured to allow PDF downloads. This is best-effort only.
+
+Automatic full-text download is not guaranteed because:
+
+- many providers return metadata but no PDF URL;
+- some papers are behind publisher access controls;
+- some links point to landing pages instead of direct PDFs;
+- network/API failures are recorded as uncertainty;
+- failed downloads fall back to abstract and metadata reading.
+
+Recommended workflow for high-quality reviews:
+
+```text
+1. Let Auto Research search and rank candidate papers.
+2. Add the most important PDFs locally.
+3. Re-run reading, evidence extraction, verification, and Final QA.
+```
+
 ## Core Workflow
 
 ### Pipeline Overview
