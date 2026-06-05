@@ -6,15 +6,13 @@ Auto Research 是一个开源的 **全自动科研助理 / 自动文献调研 Ag
 
 它不是一个只会“帮你总结论文”的聊天机器人，而是一个面向真实科研流程的 **自动科研工作台**：每一步都有文件产物，每个关键结论都尽量绑定证据，每次运行都可以被审计、复盘和 benchmark。
 
-一句话：
-
 ```text
 输入研究问题 -> 自动跑完整科研流水线 -> 输出带证据链的研究报告和 QA 决策
 ```
 
 Auto Research 的目标是让科研调研更快，但不牺牲可信度。项目默认保守、可验证、低幻觉：生成文本不会被当作证据，不支持的结论会被标记或阻止导出，证据不足时 Final QA 可以拒绝发布最终报告。
 
-## 为什么需要 Auto Research
+## 为什么需要 Auto Research/我们为什么牛波一
 
 很多研究 Agent demo 停留在“搜索几篇论文，然后写一段总结”。Auto Research 更进一步：它把完整科研流程拆成可执行、可验证、可评估的流水线。
 
@@ -28,8 +26,6 @@ Auto Research 的目标是让科研调研更快，但不牺牲可信度。项目
 - 最终报告是否可以安全导出？
 
 Auto Research 会把这些检查变成明确文件，例如 `papers.csv`、`ranked_papers.csv`、`evidence_store.jsonl`、`source_map.json`、`verification_result.json`、`final_qa_report.md` 等。
-
-## 它有什么不一样
 
 - **不是一次性 Prompt，而是 Agent 流水线**：Planner、Retriever、Triage、Reader、Evidence、Synthesis、Verifier、QA、Writer、Benchmark 分阶段协作。
 - **证据优先**：关键 claim 必须尽量回指到 evidence record，而不是只相信模型生成的文字。
