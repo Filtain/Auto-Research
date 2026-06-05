@@ -2,13 +2,23 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Auto Research 是一个以证据可追溯为核心的自动文献调研工作流。它可以把一个宽泛的研究问题转化为一组可检查的产物，包括检索论文、排序结果、论文阅读记录、证据库、综述报告、验证报告和最终 QA 决策。
+Auto Research 是一个开源的 **全自动科研助理 / 自动文献调研 Agent 系统**。你只需要输入一个研究问题，它就会自动完成任务规划、多源检索、论文排序、摘要和 PDF 阅读、证据抽取、综述归纳、结论验证、Final QA 门禁，并输出一组可检查、可追踪、可复现的研究产物。
 
-项目的设计目标是保守、可验证、低幻觉：生成文本不会被当作证据，不支持的结论会被标记或阻止导出，证据不足时 Final QA 可以拒绝发布最终报告。
+它不是一个只会“帮你总结论文”的聊天机器人，而是一个面向真实科研流程的 **自动科研工作台**：每一步都有文件产物，每个关键结论都尽量绑定证据，每次运行都可以被审计、复盘和 benchmark。
+
+一句话：
+
+```text
+输入研究问题 -> 自动跑完整科研流水线 -> 输出带证据链的研究报告和 QA 决策
+```
+
+Auto Research 的目标是让科研调研更快，但不牺牲可信度。项目默认保守、可验证、低幻觉：生成文本不会被当作证据，不支持的结论会被标记或阻止导出，证据不足时 Final QA 可以拒绝发布最终报告。
 
 ## 为什么需要 Auto Research
 
-很多研究 Agent demo 可以搜索论文并生成总结，但常常难以回答这些质量问题：
+很多研究 Agent demo 停留在“搜索几篇论文，然后写一段总结”。Auto Research 更进一步：它把完整科研流程拆成可执行、可验证、可评估的流水线。
+
+它重点解决 AI 科研里最关键的几个问题：
 
 - 每个结论由哪个来源支撑？
 - 系统读的是全文，还是只有摘要和元数据？
@@ -17,7 +27,27 @@ Auto Research 是一个以证据可追溯为核心的自动文献调研工作流
 - 不同证据之间是否存在矛盾？
 - 最终报告是否可以安全导出？
 
-Auto Research 将这些问题转化为明确的中间产物和验证步骤。
+Auto Research 会把这些检查变成明确文件，例如 `papers.csv`、`ranked_papers.csv`、`evidence_store.jsonl`、`source_map.json`、`verification_result.json`、`final_qa_report.md` 等。
+
+## 它有什么不一样
+
+- **不是一次性 Prompt，而是 Agent 流水线**：Planner、Retriever、Triage、Reader、Evidence、Synthesis、Verifier、QA、Writer、Benchmark 分阶段协作。
+- **证据优先**：关键 claim 必须尽量回指到 evidence record，而不是只相信模型生成的文字。
+- **带最终门禁**：流程可以跑完，但如果证据不足，Final QA 会拒绝导出 publication-style 结果。
+- **没有 API key 也能跑**：离线 demo 和测试默认可运行；有 key 时再开启可选 LLM 写作增强。
+- **适合 GitHub 项目化发展**：模块化 Python 包、测试、CI、示例、CLI、机器可读产物都已具备。
+- **天然可评测**：benchmark 不只评估最终回答，而是评估检索、筛选、阅读、证据、综述、验证、Final QA 和端到端安全导出。
+
+## 一条命令开始自动调研
+
+```bash
+python3 -m orchestrator.src.orchestrator \
+  'survey evaluation methods for research agents' \
+  --execute \
+  --min-sources 2
+```
+
+运行后会在 `output/` 下生成一个项目目录，里面包含检索结果、阅读记录、证据库、综述报告、验证报告和最终 QA 决策。
 
 ## 核心流程
 

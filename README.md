@@ -2,13 +2,23 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Auto Research is an evidence-grounded automated literature research workflow. It helps turn a broad research question into traceable artifacts such as retrieved papers, ranked sources, paper readings, evidence records, synthesis reports, verification reports, and final QA decisions.
+Auto Research is an open-source **autonomous research assistant** for literature-heavy scientific work. Give it a research question, and it runs a complete agent pipeline: plan the task, search multiple sources, rank papers, read abstracts and PDFs, extract evidence, synthesize findings, verify claims, and decide whether the final report is safe to export.
 
-The project is intentionally conservative: generated text is not treated as evidence, unsupported claims are marked or blocked, and final export can be denied when source support is weak.
+Think of it as a **full-stack research copilot**: not just a chatbot that writes a summary, but a traceable research workflow that produces files you can inspect, benchmark, and improve.
+
+The core promise is simple:
+
+```text
+Research question in -> evidence-grounded research artifacts out
+```
+
+Auto Research is built for people who want speed without giving up source traceability. It is intentionally conservative: generated text is not treated as evidence, unsupported claims are marked or blocked, and final export can be denied when source support is weak.
 
 ## Why Auto Research
 
-Many research-agent demos can search papers and write summaries, but they often leave important quality questions unanswered:
+Most research-agent demos stop at "search papers and write a summary." Auto Research goes further by treating the entire research process as a measurable pipeline.
+
+It is designed to answer the questions that actually matter when you rely on AI for research:
 
 - Which source supports each claim?
 - Did the system read full text or only metadata?
@@ -17,7 +27,27 @@ Many research-agent demos can search papers and write summaries, but they often 
 - Do evidence records contradict each other?
 - Is the final report safe to export?
 
-Auto Research turns these questions into explicit artifacts and checks.
+Auto Research turns those checks into first-class artifacts: `papers.csv`, `ranked_papers.csv`, `evidence_store.jsonl`, `source_map.json`, `verification_result.json`, `final_qa_report.md`, and more.
+
+## What Makes It Different
+
+- **Agent pipeline, not one-shot prompting**: planner, retriever, triage, reader, evidence, synthesis, verifier, QA, writer, and benchmark modules work as separate stages.
+- **Evidence first**: every important claim is expected to point back to source records instead of relying on generated prose.
+- **Export gate**: the system can finish a run but still block publication-style output when evidence is too weak.
+- **Runs without API keys**: deterministic demo and tests work offline; optional LLM writing can be enabled only when you want it.
+- **GitHub-friendly engineering**: modular Python packages, tests, CI, examples, CLI entry points, and machine-readable artifacts.
+- **Benchmarkable by design**: evaluates retrieval, triage, reading, evidence, synthesis, verification, Final QA, and end-to-end export safety.
+
+## One-Command Research Run
+
+```bash
+python3 -m orchestrator.src.orchestrator \
+  'survey evaluation methods for research agents' \
+  --execute \
+  --min-sources 2
+```
+
+The run creates a project folder under `output/` with structured research artifacts, logs, verification reports, and a final QA decision.
 
 ## Core Workflow
 
