@@ -1,47 +1,45 @@
 # Auto Research
 
-Auto Research is an evidence-grounded literature research workflow for building conservative research reports from papers and other scholarly sources.
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-It is designed for one practical goal: help a user move from a broad research question to traceable artifacts such as retrieved papers, ranked sources, paper readings, evidence records, synthesis reports, verification reports, and final QA decisions.
+Auto Research is an evidence-grounded automated literature research workflow. It helps turn a broad research question into traceable artifacts such as retrieved papers, ranked sources, paper readings, evidence records, synthesis reports, verification reports, and final QA decisions.
 
-The project is intentionally conservative. It does not treat generated text as evidence, and it does not silently promote unsupported claims into final output.
+The project is intentionally conservative: generated text is not treated as evidence, unsupported claims are marked or blocked, and final export can be denied when source support is weak.
 
-## Why This Project Exists
+## Why Auto Research
 
-Typical research-agent demos can retrieve papers and write summaries, but they often make it hard to answer basic quality questions:
+Many research-agent demos can search papers and write summaries, but they often leave important quality questions unanswered:
 
-- Which source supports this claim?
-- Did the system read full text or only an abstract?
+- Which source supports each claim?
+- Did the system read full text or only metadata?
 - Are numeric claims grounded in extracted tables?
 - Are citations structurally valid?
-- Do two evidence records contradict each other?
-- Should the final report be exported, or should it be blocked?
+- Do evidence records contradict each other?
+- Is the final report safe to export?
 
-Auto Research turns these questions into explicit pipeline artifacts and QA checks.
+Auto Research turns these questions into explicit artifacts and checks.
 
-## What It Does
+## Core Workflow
 
-Auto Research can:
+### Pipeline Overview
 
-- Create a research plan and DAG task graph from a user query.
-- Retrieve paper metadata from arXiv, Semantic Scholar, OpenAlex, Crossref, OpenReview, PubMed, GitHub, and local PDFs.
-- Rank and triage papers with deterministic rules.
-- Read abstracts, metadata, local PDFs, and downloaded PDFs when available.
-- Extract layout-aware PDF sections, table candidates, formula candidates, and page/bbox provenance when PyMuPDF is installed.
-- Build evidence records with stable evidence IDs and source maps.
-- Generate evidence-grounded synthesis reports, timelines, method taxonomies, research-gap candidates, and reproducibility routes.
-- Verify evidence traceability, citation metadata, provider-exposed citation graph edges, numeric table strings, and semantic-normalized contradiction candidates.
-- Run a strict Final QA gate before export.
-- Produce optional comparison matrices, idea candidates, method specs, experiment plans, evaluation reports, rebuttal scaffolds, promotion briefs, and PPT outlines.
-- Run artifact-level and dataset-level benchmark evaluation.
-- Optionally use an LLM for writing assistance while keeping LLM output separate from source evidence.
-
-## Pipeline
-
-The default workflow is:
+```mermaid
+flowchart LR
+    U[User Query] --> P[Planner]
+    P --> R[Retriever]
+    R --> T[Paper Triage]
+    T --> PR[Paper Reader]
+    PR --> E[Evidence DB]
+    E --> S[Synthesis]
+    S --> V[Verification]
+    V --> Q[Final QA]
+    Q --> D{Export allowed?}
+    D -->|Yes| O[Final Artifacts]
+    D -->|No| B[Blocked with QA Report]
+```
 
 ```text
-User query
+User Query
   -> Planner
   -> Retriever
   -> Paper Triage
@@ -52,19 +50,42 @@ User query
   -> Final QA
 ```
 
-Optional stages can be added:
+Optional modules include comparison, idea generation, method design, experiment planning, evaluation, rebuttal drafting, promotion drafting, report writing, and benchmarking.
 
-```text
-Comparison
-Idea Generation
-Method Design
-Experiment Planning / Running
-Evaluation
-Rebuttal
-Promotion
-Writer
-Benchmark
+### Evidence And QA Flow
+
+```mermaid
+flowchart TD
+    A[Retrieved Sources] --> B[Paper Readings]
+    B --> C[Evidence Records]
+    C --> D[Source Map]
+    C --> E[Synthesis Report]
+    D --> F[Claim Verification]
+    E --> F
+    F --> G[Citation Checks]
+    F --> H[Numeric Table Checks]
+    F --> I[Contradiction Checks]
+    G --> J[Verification Result]
+    H --> J
+    I --> J
+    J --> K[Final QA Gate]
+    K --> L[Export / Block Decision]
 ```
+
+## Features
+
+- DAG-based orchestrator for multi-stage research workflows.
+- Multi-source retrieval from arXiv, Semantic Scholar, OpenAlex, Crossref, OpenReview, PubMed, GitHub, and local PDFs.
+- Paper ranking and triage.
+- Abstract, metadata, local PDF, and downloaded PDF reading.
+- Layout-aware PDF section, table, and formula extraction when PyMuPDF is installed.
+- Stable evidence IDs and source maps.
+- Evidence-grounded synthesis with timelines, method taxonomies, gap candidates, and reproducibility routes.
+- Citation metadata checks and provider-exposed citation graph checks.
+- Numeric table string checks and semantic-normalized contradiction detection.
+- Strict Final QA gate before export.
+- Artifact-level and dataset-level benchmark evaluation.
+- Optional LLM-assisted writing while keeping LLM output separate from source evidence.
 
 ## Installation
 
@@ -74,7 +95,7 @@ Requires Python 3.10+.
 python3 -m pip install -e .
 ```
 
-Optional PDF layout parsing:
+Optional PDF layout support:
 
 ```bash
 python3 -m pip install -e ".[pdf]"
@@ -99,12 +120,12 @@ Outputs are written to:
 output/<project_id>/
 ```
 
-Generate control files only, without executing the DAG:
+Generate planning files only:
 
 ```bash
 python3 -m orchestrator.src.orchestrator \
-  '帮我调研一个科研主题的方法脉络，并生成一个 PPT 大纲' \
-  --output-format ppt
+  'survey evaluation methods for research agents' \
+  --output-format report
 ```
 
 Run with optional external authority checks:
@@ -117,24 +138,13 @@ python3 -m orchestrator.src.orchestrator \
   --min-sources 2
 ```
 
-Run an experiment-planning node in dry-run mode:
+Run experiment planning in dry-run mode:
 
 ```bash
 python3 -m orchestrator.src.orchestrator \
-  '帮我规划一个研究方法的验证流程' \
+  'plan validation steps for a research method' \
   --execute \
   --run-experiments
-```
-
-Execute configured experiment commands for real:
-
-```bash
-python3 -m orchestrator.src.orchestrator \
-  '帮我规划一个研究方法的验证流程' \
-  --execute \
-  --run-experiments \
-  --execute-experiment-commands \
-  --experiment-timeout-seconds 300
 ```
 
 Use optional LLM-assisted writing:
@@ -142,7 +152,7 @@ Use optional LLM-assisted writing:
 ```bash
 export OPENAI_API_KEY="your_api_key"
 python3 -m orchestrator.src.orchestrator \
-  '帮我写一个科研主题的论文综述' \
+  'write a literature review for a research topic' \
   --execute \
   --use-llm \
   --llm-provider openai \
@@ -151,7 +161,7 @@ python3 -m orchestrator.src.orchestrator \
 
 ## Offline Demo
 
-Run a deterministic local demo without network access:
+Run a deterministic demo without network access:
 
 ```bash
 python3 examples/demo/run_demo.py
@@ -176,7 +186,7 @@ python3 -m orchestrator.src.orchestrator \
   --min-sources 2
 ```
 
-Run a dataset-level benchmark over completed runs:
+Run dataset-level benchmark evaluation over completed runs:
 
 ```bash
 python3 -m benchmark.src.dataset_runner \
@@ -186,18 +196,16 @@ python3 -m benchmark.src.dataset_runner \
 
 ## Key Outputs
 
-Common pipeline artifacts include:
-
-- `research_plan.json`: structured plan for the research run.
+- `research_plan.json`: structured research plan.
 - `task_graph.json`: DAG tasks and dependencies.
-- `papers.csv`: retrieved normalized paper metadata.
-- `ranked_papers.csv`: triaged and ranked sources.
+- `papers.csv`: retrieved paper metadata.
+- `ranked_papers.csv`: ranked and triaged sources.
 - `paper_readings.jsonl`: per-paper reading records.
 - `paper_layout_blocks.jsonl`: layout-aware PDF blocks when available.
-- `paper_sections.jsonl`: extracted section candidates.
+- `paper_sections.jsonl`: section candidates.
 - `paper_tables.jsonl`: table candidates.
 - `paper_structured_tables.jsonl`: parsed table candidates.
-- `paper_structured_tables.csv`: long-form structured table cells.
+- `paper_structured_tables.csv`: long-form table cells.
 - `paper_formulas.jsonl`: formula candidates.
 - `evidence_store.jsonl`: traceable evidence records.
 - `source_map.json`: evidence-to-source map.
@@ -208,30 +216,14 @@ Common pipeline artifacts include:
 - `final_qa_report.md`: final export gate report.
 - `final_decision.json`: final workflow decision.
 
-Optional stages may also produce:
-
-- `literature_matrix.csv`
-- `benchmark_matrix.csv`
-- `idea_candidates.md`
-- `method_spec.md`
-- `ablation_plan.md`
-- `experiment_plan.md`
-- `evaluation_report.md`
-- `rebuttal_plan.md`
-- `promotion_brief.md`
-- `ppt_outline.md`
-- `final_report.md`
-
 ## Anti-Hallucination Design
-
-Auto Research follows these rules:
 
 - Missing metadata stays empty.
 - Abstract-only evidence is marked as weak.
 - Full-text availability is explicit.
 - PDF layout, table, and formula outputs are extraction candidates until checked against the original PDF.
 - External provider failures are logged as uncertainty, not proof that a paper or citation does not exist.
-- Citation graph checks only verify provider-exposed references/citations.
+- Citation graph checks only verify provider-exposed references and citations.
 - LLM output is optional writing assistance, not a source of new evidence.
 - Final QA can complete the workflow while still denying export.
 
