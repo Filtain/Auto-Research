@@ -1,0 +1,2 @@
+rank,decision,score,paper_id,title,authors,year,venue,doi,arxiv_id,url,abstract,citation_count,source,pdf_url,local_pdf_path,retrieved_at,query
+1,include,0.900,demo:local_paper,DemoNF: Offline Neural Field Fixture,Auto Research Contributors,2026,Demo,,,,"We propose DemoNF for compact reconstruction.",,local_pdf,,examples/demo/local_paper.txt,,demo neural field

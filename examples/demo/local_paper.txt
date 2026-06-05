@@ -1,0 +1,18 @@
+Abstract
+We propose DemoNF, a neural field method for compact reconstruction.
+
+1 Introduction
+This demo paper introduces a small offline fixture for Auto Research.
+
+2 Method
+DemoNF uses a multi-resolution field representation.
+E = mc^2 (1)
+
+3 Experiments
+Table 1 Results
+Method  PSNR  SSIM
+Baseline  28.0  0.85
+DemoNF    31.0  0.91
+
+4 Limitations
+The demo is limited to deterministic offline testing.

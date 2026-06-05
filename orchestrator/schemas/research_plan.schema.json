@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResearchPlan",
+  "type": "object",
+  "required": [
+    "project_id",
+    "topic",
+    "goal",
+    "task_type",
+    "research_questions",
+    "expected_artifacts",
+    "quality_requirements"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "topic": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "task_type": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "literature_review",
+          "method_analysis",
+          "method_comparison",
+          "idea_generation",
+          "method_design",
+          "experiment_planning",
+          "paper_writing",
+          "evaluation",
+          "rebuttal",
+          "promotion",
+          "ppt_generation"
+        ]
+      }
+    },
+    "domain": {
+      "type": "string"
+    },
+    "research_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "expected_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "quality_requirements": {
+      "type": "object",
+      "required": [
+        "need_citations",
+        "need_source_trace",
+        "need_verification",
+        "allow_uncertain_claims"
+      ],
+      "properties": {
+        "need_citations": {
+          "type": "boolean"
+        },
+        "need_source_trace": {
+          "type": "boolean"
+        },
+        "need_verification": {
+          "type": "boolean"
+        },
+        "allow_uncertain_claims": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

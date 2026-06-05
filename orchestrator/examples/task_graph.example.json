@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {
+      "task_id": "T1",
+      "task_name": "search_related_papers",
+      "agent": "retriever_agent",
+      "status": "pending",
+      "input": {
+        "query": "BANF band-limited neural fields NeRF LOD"
+      },
+      "output": null,
+      "depends_on": [],
+      "retry_count": 0
+    },
+    {
+      "task_id": "T2",
+      "task_name": "parse_core_paper",
+      "agent": "paper_reader_agent",
+      "status": "pending",
+      "input": {
+        "paper_id": "BANF_2024"
+      },
+      "output": null,
+      "depends_on": ["T1"],
+      "retry_count": 0
+    },
+    {
+      "task_id": "T3",
+      "task_name": "extract_network_structure",
+      "agent": "method_extractor_agent",
+      "status": "pending",
+      "input": {
+        "focus": ["module", "input", "output", "loss", "training"]
+      },
+      "output": null,
+      "depends_on": ["T2"],
+      "retry_count": 0
+    }
+  ]
+}

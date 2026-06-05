@@ -1,0 +1,13 @@
+{
+  "dataset_name": "auto_research_offline_demo",
+  "description": "Small deterministic artifact benchmark dataset for CI and local smoke tests.",
+  "samples": [
+    {
+      "sample_id": "demo_local_pdf",
+      "split": "demo",
+      "tags": ["offline", "local_text", "artifact_quality"],
+      "run_dir": "../../output/demo_local_pdf",
+      "benchmark_spec": "benchmark_spec.json"
+    }
+  ]
+}

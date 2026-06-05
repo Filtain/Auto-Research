@@ -1,0 +1,1 @@
+"""Evidence extraction implementation."""

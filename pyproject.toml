@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-research"
+version = "0.1.0"
+description = "Evidence-grounded automated literature research MVP."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "Auto Research Contributors"}
+]
+keywords = ["research", "literature-review", "rag", "agents", "verification"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = []
+
+[project.optional-dependencies]
+pdf = ["pymupdf>=1.23"]
+dev = []
+
+[project.scripts]
+auto-research = "orchestrator.src.orchestrator:main"
+auto-research-benchmark = "benchmark.src.dataset_runner:main"
+
+[tool.setuptools]
+packages = [
+  "benchmark",
+  "benchmark.src",
+  "comparison",
+  "comparison.src",
+  "evidence_db",
+  "evidence_db.src",
+  "evaluation",
+  "evaluation.src",
+  "experiment",
+  "experiment.src",
+  "final_qa",
+  "final_qa.src",
+  "idea_generation",
+  "idea_generation.src",
+  "llm",
+  "llm.src",
+  "method_design",
+  "method_design.src",
+  "orchestrator",
+  "orchestrator.src",
+  "paper_reader",
+  "paper_reader.src",
+  "paper_triage",
+  "paper_triage.src",
+  "planner",
+  "planner.src",
+  "promotion",
+  "promotion.src",
+  "rebuttal",
+  "rebuttal.src",
+  "retriever",
+  "retriever.src",
+  "synthesis",
+  "synthesis.src",
+  "verification",
+  "verification.src",
+  "writer",
+  "writer.src"
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "planner/tests",
+  "orchestrator/tests",
+  "retriever/tests",
+  "paper_triage/tests",
+  "paper_reader/tests",
+  "evidence_db/tests",
+  "synthesis/tests",
+  "verification/tests",
+  "final_qa/tests",
+  "benchmark/tests",
+  "comparison/tests",
+  "idea_generation/tests",
+  "method_design/tests",
+  "experiment/tests",
+  "evaluation/tests",
+  "rebuttal/tests",
+  "promotion/tests",
+  "writer/tests",
+  "llm/tests"
+]

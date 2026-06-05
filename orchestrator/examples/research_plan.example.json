@@ -1,0 +1,32 @@
+{
+  "project_id": "auto_research_20260513_001",
+  "topic": "BANF: Band-limited Neural Fields for Levels of Detail Reconstruction",
+  "goal": "Analyze the method architecture, input-output flow, innovation, and reproduction plan.",
+  "task_type": [
+    "literature_review",
+    "method_analysis",
+    "experiment_planning",
+    "ppt_generation"
+  ],
+  "domain": "computer_vision",
+  "research_questions": [
+    "What problem does BANF solve?",
+    "How does BANF implement band-limited neural fields?",
+    "What are the inputs and outputs of each module?",
+    "How is BANF different from NeRF and Instant-NGP?",
+    "How can the method be reproduced?"
+  ],
+  "expected_artifacts": [
+    "paper_summary.md",
+    "method_structure.md",
+    "comparison_table.csv",
+    "reproduction_plan.md",
+    "ppt_outline.md"
+  ],
+  "quality_requirements": {
+    "need_citations": true,
+    "need_source_trace": true,
+    "need_verification": true,
+    "allow_uncertain_claims": false
+  }
+}

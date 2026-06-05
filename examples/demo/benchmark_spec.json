@@ -1,0 +1,14 @@
+{
+  "expected_papers": [
+    {
+      "title": "DemoNF: Offline Neural Field Fixture"
+    }
+  ],
+  "triage_top_k": 1,
+  "expected_sections": ["method", "experiments"],
+  "required_synthesis_topics": ["neural field"],
+  "expected_unsupported_claim_count": 0,
+  "expected_export_allowed": false,
+  "expected_safe_export": false,
+  "pass_threshold": 0.7
+}

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# Project outputs
+output/
+*.log
+llm_calls.jsonl
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Large local research assets
+pdfs/
+*.pdf
+*.pt
+*.pth
+*.ckpt
+*.zip
